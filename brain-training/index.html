@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>腦部反應訓練</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #e8e8e8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #languageSelection, #instructionPage {
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 800px;
+        }
+
+        #languageSelection h1, #instructionPage h1 {
+            margin-bottom: 40px;
+            color: #333;
+            font-size: 2.5em;
+        }
+
+        .language-btn, .start-btn {
+            margin: 15px;
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .language-btn:hover, .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #instructionPage {
+            display: none;
+        }
+
+        #instructionPage .instructions {
+            text-align: left;
+            margin: 30px auto;
+            max-width: 600px;
+            line-height: 1.8;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        #instructionPage .instructions h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            margin-top: 25px;
+            font-size: 1.5em;
+        }
+
+        #instructionPage .instructions ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        #instructionPage .instructions li {
+            margin-bottom: 10px;
+        }
+
+        #gameContainer {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #colorWord {
+            font-size: 15vw;
+            font-weight: bold;
+            text-align: center;
+            user-select: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
+                         -2px -2px 4px rgba(0, 0, 0, 0.5),
+                         2px -2px 4px rgba(0, 0, 0, 0.5),
+                         -2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #statusInfo {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: white;
+            font-size: 1.2em;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 語言選擇畫面 -->
+    <div id="languageSelection">
+        <h1>選擇語言 / Select Language</h1>
+        <button class="language-btn" onclick="selectLanguage('zh-TW')">繁體中文</button>
+        <button class="language-btn" onclick="selectLanguage('zh-CN')">简体中文</button>
+        <button class="language-btn" onclick="selectLanguage('en')">English</button>
+        <button class="language-btn" onclick="selectLanguage('ja')">日本語</button>
+        <button class="language-btn" onclick="selectLanguage('fr')">Français</button>
+    </div>
+
+    <!-- 使用說明畫面 -->
+    <div id="instructionPage">
+        <h1 id="instructionTitle"></h1>
+        <div class="instructions" id="instructionContent"></div>
+        <button class="start-btn" onclick="startGame()" id="startButton"></button>
+    </div>
+
+    <!-- 遊戲畫面 -->
+    <div id="gameContainer">
+        <div id="statusInfo">
+            <div id="speedInfo"></div>
+            <div id="pauseInfo"></div>
+        </div>
+        <div id="colorWord"></div>
+    </div>
+
+    <script>
+        // 不同語言的顏色單字和文字
+        const colorWords = {
+            'zh-TW': {
+                colors: ['紅色', '藍色', '綠色', '黃色', '紫色', '橙色', '粉色', '黑色', '白色', '灰色', '棕色', '深藍'],
+                pauseText: '已暫停（點擊繼續）',
+                playingText: '進行中（點擊暫停）',
+                speedText: '速度：',
+                instructionTitle: '遊戲說明',
+                instructions: `
+                    <h2>🎯 遊戲目標</h2>
+                    <p>這是一個訓練腦部反應的 Stroop 測試遊戲！畫面會顯示顏色的名稱，但文字的顏色會與文字內容不同。</p>
+
+                    <h2>📖 遊戲規則</h2>
+                    <ul>
+                        <li>畫面會隨機顯示顏色的單字（例如：「紅色」）</li>
+                        <li>文字的顏色也是隨機的，但<strong>不會</strong>和單字本身相同</li>
+                        <li>例如：「紅色」這兩個字可能會以藍色顯示</li>
+                        <li>遊戲會越來越快，挑戰你的反應能力！</li>
+                    </ul>
+
+                    <h2>⚡ 速度變化</h2>
+                    <ul>
+                        <li>初始速度：每 3 秒換一個單字</li>
+                        <li>每 5 秒會自動加速</li>
+                        <li>最快速度：每 1.5 秒換一個單字</li>
+                    </ul>
+
+                    <h2>🎮 操作方式</h2>
+                    <ul>
+                        <li><strong>點擊畫面</strong>：暫停遊戲</li>
+                        <li><strong>再次點擊</strong>：繼續遊戲</li>
+                        <li>左上角會顯示當前速度和暫停狀態</li>
+                    </ul>
+                `,
+                startButton: '開始遊戲'
+            },
+            'zh-CN': {
+                colors: ['红色', '蓝色', '绿色', '黄色', '紫色', '橙色', '粉色', '黑色', '白色', '灰色', '棕色', '深蓝'],
+                pauseText: '已暂停（点击继续）',
+                playingText: '进行中（点击暂停）',
+                speedText: '速度：',
+                instructionTitle: '游戏说明',
+                instructions: `
+                    <h2>🎯 游戏目标</h2>
+                    <p>这是一个训练大脑反应的 Stroop 测试游戏！画面会显示颜色的名称，但文字的颜色会与文字内容不同。</p>
+
+                    <h2>📖 游戏规则</h2>
+                    <ul>
+                        <li>画面会随机显示颜色的单字（例如：「红色」）</li>
+                        <li>文字的颜色也是随机的，但<strong>不会</strong>和单字本身相同</li>
+                        <li>例如：「红色」这两个字可能会以蓝色显示</li>
+                        <li>游戏会越来越快，挑战你的反应能力！</li>
+                    </ul>
+
+                    <h2>⚡ 速度变化</h2>
+                    <ul>
+                        <li>初始速度：每 3 秒换一个单字</li>
+                        <li>每 5 秒会自动加速</li>
+                        <li>最快速度：每 1.5 秒换一个单字</li>
+                    </ul>
+
+                    <h2>🎮 操作方式</h2>
+                    <ul>
+                        <li><strong>点击画面</strong>：暂停游戏</li>
+                        <li><strong>再次点击</strong>：继续游戏</li>
+                        <li>左上角会显示当前速度和暂停状态</li>
+                    </ul>
+                `,
+                startButton: '开始游戏'
+            },
+            'en': {
+                colors: ['RED', 'BLUE', 'GREEN', 'YELLOW', 'PURPLE', 'ORANGE', 'PINK', 'BLACK', 'WHITE', 'GRAY', 'BROWN', 'NAVY'],
+                pauseText: 'PAUSED (Click to continue)',
+                playingText: 'PLAYING (Click to pause)',
+                speedText: 'Speed: ',
+                instructionTitle: 'Game Instructions',
+                instructions: `
+                    <h2>🎯 Game Objective</h2>
+                    <p>This is a Stroop test game to train your brain reaction! The screen will display color names, but the text color will be different from the word itself.</p>
+
+                    <h2>📖 Game Rules</h2>
+                    <ul>
+                        <li>The screen will randomly display color words (e.g., "RED")</li>
+                        <li>The text color is also random, but will <strong>not</strong> match the word</li>
+                        <li>For example: The word "RED" might be displayed in blue color</li>
+                        <li>The game gets faster and faster, challenging your reaction ability!</li>
+                    </ul>
+
+                    <h2>⚡ Speed Changes</h2>
+                    <ul>
+                        <li>Starting speed: Changes every 3 seconds</li>
+                        <li>Automatically speeds up every 5 seconds</li>
+                        <li>Maximum speed: Changes every 1.5 seconds</li>
+                    </ul>
+
+                    <h2>🎮 Controls</h2>
+                    <ul>
+                        <li><strong>Click screen</strong>: Pause the game</li>
+                        <li><strong>Click again</strong>: Resume the game</li>
+                        <li>Top-left corner shows current speed and pause status</li>
+                    </ul>
+                `,
+                startButton: 'Start Game'
+            },
+            'ja': {
+                colors: ['赤', '青', '緑', '黄色', '紫', 'オレンジ', 'ピンク', '黒', '白', '灰色', '茶色', '紺'],
+                pauseText: '一時停止中（クリックで続行）',
+                playingText: 'プレイ中（クリックで一時停止）',
+                speedText: 'スピード：',
+                instructionTitle: 'ゲーム説明',
+                instructions: `
+                    <h2>🎯 ゲーム目的</h2>
+                    <p>これは脳の反応を訓練するストループテストゲームです！画面には色の名前が表示されますが、文字の色は単語と異なります。</p>
+
+                    <h2>📖 ゲームルール</h2>
+                    <ul>
+                        <li>画面にランダムに色の単語が表示されます（例：「赤」）</li>
+                        <li>文字の色もランダムですが、単語自体とは<strong>一致しません</strong></li>
+                        <li>例：「赤」という文字が青色で表示される場合があります</li>
+                        <li>ゲームはどんどん速くなり、反応能力に挑戦します！</li>
+                    </ul>
+
+                    <h2>⚡ スピード変化</h2>
+                    <ul>
+                        <li>初期スピード：3秒ごとに変更</li>
+                        <li>5秒ごとに自動的に加速</li>
+                        <li>最高スピード：1.5秒ごとに変更</li>
+                    </ul>
+
+                    <h2>🎮 操作方法</h2>
+                    <ul>
+                        <li><strong>画面をクリック</strong>：ゲームを一時停止</li>
+                        <li><strong>もう一度クリック</strong>：ゲームを再開</li>
+                        <li>左上隅に現在のスピードと一時停止状態が表示されます</li>
+                    </ul>
+                `,
+                startButton: 'ゲーム開始'
+            },
+            'fr': {
+                colors: ['ROUGE', 'BLEU', 'VERT', 'JAUNE', 'VIOLET', 'ORANGE', 'ROSE', 'NOIR', 'BLANC', 'GRIS', 'MARRON', 'MARINE'],
+                pauseText: 'EN PAUSE (Cliquez pour continuer)',
+                playingText: 'EN JEU (Cliquez pour pause)',
+                speedText: 'Vitesse : ',
+                instructionTitle: 'Instructions du jeu',
+                instructions: `
+                    <h2>🎯 Objectif du jeu</h2>
+                    <p>Il s'agit d'un jeu de test de Stroop pour entraîner votre réaction cérébrale ! L'écran affichera des noms de couleurs, mais la couleur du texte sera différente du mot lui-même.</p>
+
+                    <h2>📖 Règles du jeu</h2>
+                    <ul>
+                        <li>L'écran affichera aléatoirement des mots de couleur (par exemple, "ROUGE")</li>
+                        <li>La couleur du texte est également aléatoire, mais ne <strong>correspondra pas</strong> au mot</li>
+                        <li>Par exemple : Le mot "ROUGE" peut être affiché en couleur bleue</li>
+                        <li>Le jeu devient de plus en plus rapide, mettant au défi votre capacité de réaction !</li>
+                    </ul>
+
+                    <h2>⚡ Changements de vitesse</h2>
+                    <ul>
+                        <li>Vitesse de départ : Change toutes les 3 secondes</li>
+                        <li>Accélère automatiquement toutes les 5 secondes</li>
+                        <li>Vitesse maximale : Change toutes les 1,5 secondes</li>
+                    </ul>
+
+                    <h2>🎮 Contrôles</h2>
+                    <ul>
+                        <li><strong>Cliquez sur l'écran</strong> : Mettre le jeu en pause</li>
+                        <li><strong>Cliquez à nouveau</strong> : Reprendre le jeu</li>
+                        <li>Le coin supérieur gauche affiche la vitesse actuelle et l'état de pause</li>
+                    </ul>
+                `,
+                startButton: 'Commencer le jeu'
+            }
+        };
+
+        // 實際的顏色值（更容易識別的顏色）
+        const actualColors = ['#FF0000', '#0066FF', '#00AA00', '#FFD700', '#9932CC', '#FF8C00', '#FF1493', '#000000', '#FFFFFF', '#808080', '#8B4513', '#000080'];
+
+        let currentLanguage = '';
+        let currentInterval = 3000; // 初始3秒
+        let minInterval = 1500; // 最快1.5秒
+        let intervalDecrease = 100; // 每次減少100毫秒
+        let isPaused = false;
+        let gameTimer = null;
+        let elapsedTime = 0;
+        let speedTimer = null;
+
+        function selectLanguage(language) {
+            currentLanguage = language;
+
+            // 隱藏語言選擇畫面
+            document.getElementById('languageSelection').classList.add('hidden');
+
+            // 顯示使用說明畫面
+            const instructionPage = document.getElementById('instructionPage');
+            instructionPage.style.display = 'block';
+
+            // 設置說明內容
+            const texts = colorWords[currentLanguage];
+            document.getElementById('instructionTitle').textContent = texts.instructionTitle;
+            document.getElementById('instructionContent').innerHTML = texts.instructions;
+            document.getElementById('startButton').textContent = texts.startButton;
+        }
+
+        function startGame() {
+            // 隱藏使用說明畫面
+            document.getElementById('instructionPage').style.display = 'none';
+
+            // 顯示遊戲畫面
+            document.getElementById('gameContainer').style.display = 'flex';
+
+            // 顯示第一個單字
+            showRandomColorWord();
+
+            // 開始計時器
+            startGameTimer();
+
+            // 開始加速計時器
+            startSpeedTimer();
+
+            updateStatus();
+        }
+
+        function showRandomColorWord() {
+            const colorWord = document.getElementById('colorWord');
+            const words = colorWords[currentLanguage].colors;
+
+            // 隨機選擇單字
+            const randomWordIndex = Math.floor(Math.random() * words.length);
+            const word = words[randomWordIndex];
+
+            // 隨機選擇顏色，但不能和單字相同
+            let randomColorIndex;
+            do {
+                randomColorIndex = Math.floor(Math.random() * actualColors.length);
+            } while (randomColorIndex === randomWordIndex);
+
+            const color = actualColors[randomColorIndex];
+
+            colorWord.textContent = word;
+            colorWord.style.color = color;
+        }
+
+        function startGameTimer() {
+            if (gameTimer) clearInterval(gameTimer);
+
+            gameTimer = setInterval(() => {
+                if (!isPaused) {
+                    showRandomColorWord();
+                }
+            }, currentInterval);
+        }
+
+        function startSpeedTimer() {
+            if (speedTimer) clearInterval(speedTimer);
+
+            speedTimer = setInterval(() => {
+                if (!isPaused && currentInterval > minInterval) {
+                    currentInterval -= intervalDecrease;
+
+                    // 確保不低於最小間隔
+                    if (currentInterval < minInterval) {
+                        currentInterval = minInterval;
+                    }
+
+                    // 重新啟動計時器以應用新速度
+                    startGameTimer();
+                    updateStatus();
+                }
+            }, 5000); // 每5秒加速一次
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            updateStatus();
+        }
+
+        function updateStatus() {
+            const pauseInfo = document.getElementById('pauseInfo');
+            const speedInfo = document.getElementById('speedInfo');
+            const texts = colorWords[currentLanguage];
+
+            pauseInfo.textContent = isPaused ? texts.pauseText : texts.playingText;
+            speedInfo.textContent = texts.speedText + (currentInterval / 1000).toFixed(1) + 's';
+        }
+
+        // 點擊畫面切換暫停狀態
+        document.getElementById('gameContainer').addEventListener('click', togglePause);
+    </script>
+</body>
+</html>
