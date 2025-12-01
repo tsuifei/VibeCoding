@@ -56,6 +56,10 @@
             display: none;
         }
 
+        #instructionPage .start-btn {
+            margin-bottom: 30px;
+        }
+
         #instructionPage .instructions {
             text-align: left;
             margin: 30px auto;
@@ -117,6 +121,84 @@
         .hidden {
             display: none !important;
         }
+
+        /* RWD - 響應式設計 */
+        @media screen and (max-width: 768px) {
+            #languageSelection, #instructionPage {
+                padding: 30px 20px;
+                max-width: 90%;
+                margin: 20px;
+            }
+
+            #languageSelection h1, #instructionPage h1 {
+                font-size: 1.8em;
+                margin-bottom: 30px;
+            }
+
+            .language-btn, .start-btn {
+                padding: 15px 30px;
+                font-size: 1.2em;
+                margin: 10px;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            #instructionPage .instructions {
+                font-size: 1em;
+                margin: 20px auto;
+            }
+
+            #instructionPage .instructions h2 {
+                font-size: 1.3em;
+            }
+
+            #colorWord {
+                font-size: 20vw;
+            }
+
+            #statusInfo {
+                font-size: 1em;
+                padding: 10px 15px;
+                top: 15px;
+                left: 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            #languageSelection, #instructionPage {
+                padding: 20px 15px;
+            }
+
+            #languageSelection h1, #instructionPage h1 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+
+            .language-btn, .start-btn {
+                padding: 12px 25px;
+                font-size: 1em;
+                margin: 8px;
+            }
+
+            #instructionPage .instructions {
+                font-size: 0.9em;
+            }
+
+            #instructionPage .instructions h2 {
+                font-size: 1.2em;
+            }
+
+            #colorWord {
+                font-size: 25vw;
+            }
+
+            #statusInfo {
+                font-size: 0.9em;
+                padding: 8px 12px;
+                top: 10px;
+                left: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -133,8 +215,8 @@
     <!-- 使用說明畫面 -->
     <div id="instructionPage">
         <h1 id="instructionTitle"></h1>
-        <div class="instructions" id="instructionContent"></div>
         <button class="start-btn" onclick="startGame()" id="startButton"></button>
+        <div class="instructions" id="instructionContent"></div>
     </div>
 
     <!-- 遊戲畫面 -->
@@ -150,7 +232,7 @@
         // 不同語言的顏色單字和文字
         const colorWords = {
             'zh-TW': {
-                colors: ['紅色', '藍色', '綠色', '黃色', '紫色', '橙色', '粉色', '黑色', '白色', '灰色', '棕色', '深藍'],
+                colors: ['紅', '藍', '綠', '黃', '紫', '橙', '粉', '黑', '白', '灰', '棕', '深藍'],
                 pauseText: '已暫停（點擊繼續）',
                 playingText: '進行中（點擊暫停）',
                 speedText: '速度：',
@@ -161,9 +243,9 @@
 
                     <h2>📖 遊戲規則</h2>
                     <ul>
-                        <li>畫面會隨機顯示顏色的單字（例如：「紅色」）</li>
+                        <li>畫面會隨機顯示顏色的單字（例如：「紅」）</li>
                         <li>文字的顏色也是隨機的，但<strong>不會</strong>和單字本身相同</li>
-                        <li>例如：「紅色」這兩個字可能會以藍色顯示</li>
+                        <li>例如：「紅」這個字可能會以藍色顯示</li>
                         <li>遊戲會越來越快，挑戰你的反應能力！</li>
                     </ul>
 
@@ -184,7 +266,7 @@
                 startButton: '開始遊戲'
             },
             'zh-CN': {
-                colors: ['红色', '蓝色', '绿色', '黄色', '紫色', '橙色', '粉色', '黑色', '白色', '灰色', '棕色', '深蓝'],
+                colors: ['红', '蓝', '绿', '黄', '紫', '橙', '粉', '黑', '白', '灰', '棕', '深蓝'],
                 pauseText: '已暂停（点击继续）',
                 playingText: '进行中（点击暂停）',
                 speedText: '速度：',
@@ -195,9 +277,9 @@
 
                     <h2>📖 游戏规则</h2>
                     <ul>
-                        <li>画面会随机显示颜色的单字（例如：「红色」）</li>
+                        <li>画面会随机显示颜色的单字（例如：「红」）</li>
                         <li>文字的颜色也是随机的，但<strong>不会</strong>和单字本身相同</li>
-                        <li>例如：「红色」这两个字可能会以蓝色显示</li>
+                        <li>例如：「红」这个字可能会以蓝色显示</li>
                         <li>游戏会越来越快，挑战你的反应能力！</li>
                     </ul>
 
@@ -369,6 +451,18 @@
             updateStatus();
         }
 
+        // 計算顏色亮度（判斷深色或淺色）
+        function getColorBrightness(hexColor) {
+            // 移除 # 符號
+            const hex = hexColor.replace('#', '');
+            // 轉換為 RGB
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);
+            const b = parseInt(hex.substr(4, 2), 16);
+            // 計算亮度 (0-255)
+            return (r * 299 + g * 587 + b * 114) / 1000;
+        }
+
         function showRandomColorWord() {
             const colorWord = document.getElementById('colorWord');
             const words = colorWords[currentLanguage].colors;
@@ -384,9 +478,25 @@
             } while (randomColorIndex === randomWordIndex);
 
             const color = actualColors[randomColorIndex];
+            const brightness = getColorBrightness(color);
 
             colorWord.textContent = word;
             colorWord.style.color = color;
+
+            // 根據顏色亮度調整陰影：深色用淺灰色陰影，淺色用深色陰影
+            if (brightness < 128) {
+                // 深色文字使用淺灰色陰影
+                colorWord.style.textShadow = `2px 2px 4px rgba(200, 200, 200, 0.8),
+                                              -2px -2px 4px rgba(200, 200, 200, 0.8),
+                                              2px -2px 4px rgba(200, 200, 200, 0.8),
+                                              -2px 2px 4px rgba(200, 200, 200, 0.8)`;
+            } else {
+                // 淺色文字使用深色陰影
+                colorWord.style.textShadow = `2px 2px 4px rgba(0, 0, 0, 0.5),
+                                              -2px -2px 4px rgba(0, 0, 0, 0.5),
+                                              2px -2px 4px rgba(0, 0, 0, 0.5),
+                                              -2px 2px 4px rgba(0, 0, 0, 0.5)`;
+            }
         }
 
         function startGameTimer() {
