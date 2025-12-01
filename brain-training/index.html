@@ -122,6 +122,19 @@
             display: none !important;
         }
 
+        /* 瀏覽次數計數器 */
+        #visitCounter {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.75em;
+            z-index: 9999;
+        }
+
         /* RWD - 響應式設計 */
         @media screen and (max-width: 768px) {
             #languageSelection, #instructionPage {
@@ -198,6 +211,13 @@
                 top: 10px;
                 left: 10px;
             }
+
+            #visitCounter {
+                font-size: 0.7em;
+                padding: 4px 8px;
+                bottom: 8px;
+                right: 8px;
+            }
         }
     </style>
 </head>
@@ -228,7 +248,22 @@
         <div id="colorWord"></div>
     </div>
 
+    <!-- 瀏覽次數計數器 -->
+    <div id="visitCounter">👁️ <span id="visitCount">0</span></div>
+
     <script>
+        // 瀏覽次數計數器
+        (function() {
+            let visitCount = localStorage.getItem('brainTrainingVisits');
+            if (visitCount === null) {
+                visitCount = 0;
+            }
+            visitCount = parseInt(visitCount) + 1;
+            localStorage.setItem('brainTrainingVisits', visitCount);
+            document.getElementById('visitCount').textContent = visitCount;
+        })();
+
+
         // 不同語言的顏色單字和文字
         const colorWords = {
             'zh-TW': {
