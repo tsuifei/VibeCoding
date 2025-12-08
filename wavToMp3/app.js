@@ -21,9 +21,10 @@ class WavToMp3Converter {
     }
 
     attachEventListeners() {
-        // 點擊選擇文件
+        // 點擊選擇文件按鈕
         this.selectFilesBtn.addEventListener('click', (e) => {
             e.stopPropagation(); // 阻止事件冒泡
+            e.preventDefault(); // 防止默認行為
             this.fileInput.click();
         });
 
@@ -33,10 +34,12 @@ class WavToMp3Converter {
             e.target.value = ''; // 重置以允許重複選擇
         });
 
-        // 拖拽事件
+        // 拖拽區域點擊事件（不包括按鈕）
         this.uploadArea.addEventListener('click', (e) => {
-            // 避免點擊按鈕時重複觸發
-            if (e.target.closest('button')) return;
+            // 如果點擊的是按鈕或按鈕內部元素，直接返回
+            if (e.target === this.selectFilesBtn || this.selectFilesBtn.contains(e.target)) {
+                return;
+            }
             this.fileInput.click();
         });
 
@@ -147,10 +150,16 @@ class WavToMp3Converter {
                 </button>
             `;
         } else if (fileObj.status === 'converting') {
+            const progressPercent = Math.round(fileObj.progress);
             statusHTML = `
-                <span class="status-badge converting">轉換中</span>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${fileObj.progress}%"></div>
+                <div class="converting-status">
+                    <div class="converting-info">
+                        <span class="status-badge converting">轉換中</span>
+                        <span class="progress-text">${progressPercent}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${fileObj.progress}%"></div>
+                    </div>
                 </div>
                 <div class="spinner"></div>
             `;

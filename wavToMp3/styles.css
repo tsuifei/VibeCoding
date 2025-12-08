@@ -340,18 +340,53 @@ body {
     color: var(--danger-color);
 }
 
+/* Converting Status */
+.converting-status {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 180px;
+}
+
+.converting-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.progress-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary-color);
+    min-width: 40px;
+    text-align: right;
+}
+
 .progress-bar {
-    width: 100px;
-    height: 6px;
+    width: 100%;
+    height: 8px;
     background: var(--surface-color);
-    border-radius: 3px;
+    border-radius: 4px;
     overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .progress-fill {
     height: 100%;
-    background: var(--primary-color);
-    transition: width 0.3s;
+    background: linear-gradient(90deg, var(--primary-color), #5dade2);
+    transition: width 0.3s ease-out;
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
 }
 
 .btn-download {
