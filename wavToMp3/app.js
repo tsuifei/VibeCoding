@@ -22,7 +22,8 @@ class WavToMp3Converter {
 
     attachEventListeners() {
         // 點擊選擇文件
-        this.selectFilesBtn.addEventListener('click', () => {
+        this.selectFilesBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // 阻止事件冒泡
             this.fileInput.click();
         });
 
@@ -33,7 +34,9 @@ class WavToMp3Converter {
         });
 
         // 拖拽事件
-        this.uploadArea.addEventListener('click', () => {
+        this.uploadArea.addEventListener('click', (e) => {
+            // 避免點擊按鈕時重複觸發
+            if (e.target.closest('button')) return;
             this.fileInput.click();
         });
 
@@ -94,6 +97,9 @@ class WavToMp3Converter {
 
         this.updateStats();
         this.showFileList();
+
+        // 自動開始轉換
+        this.convertAll(true);
     }
 
     addFileToList(fileObj) {
@@ -173,11 +179,13 @@ class WavToMp3Converter {
         statusElement.innerHTML = statusHTML;
     }
 
-    async convertAll() {
+    async convertAll(autoConvert = false) {
         const pendingFiles = this.files.filter(f => f.status === 'pending');
 
         if (pendingFiles.length === 0) {
-            alert('沒有待轉換的文件');
+            if (!autoConvert) {
+                alert('沒有待轉換的文件');
+            }
             return;
         }
 
@@ -188,7 +196,11 @@ class WavToMp3Converter {
         }
 
         this.convertAllBtn.disabled = false;
-        alert('所有文件轉換完成！');
+
+        // 只有手動點擊轉換按鈕時才顯示完成提示
+        if (!autoConvert) {
+            alert('所有文件轉換完成！');
+        }
     }
 
     async convertFile(fileObj) {
