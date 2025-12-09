@@ -5,25 +5,27 @@
 }
 
 :root {
-    --primary-color: #3498db;
-    --primary-dark: #2980b9;
-    --secondary-color: #34495e;
-    --success-color: #27ae60;
-    --warning-color: #f39c12;
-    --danger-color: #e74c3c;
-    --bg-color: #0f1419;
-    --surface-color: #1a1f2e;
-    --surface-light: #242b3d;
-    --text-primary: #ffffff;
-    --text-secondary: #a0aec0;
-    --border-color: #2d3748;
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --primary-color: #1976d2;
+    --primary-dark: #1565c0;
+    --primary-light: #42a5f5;
+    --secondary-color: #424242;
+    --success-color: #2e7d32;
+    --warning-color: #f57c00;
+    --danger-color: #d32f2f;
+    --bg-color: #f5f7fa;
+    --surface-color: #e3f2fd;
+    --surface-light: #ffffff;
+    --text-primary: #212121;
+    --text-secondary: #616161;
+    --border-color: #e0e0e0;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --hover-shadow: 0 4px 12px rgba(25, 118, 210, 0.15);
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-    background: linear-gradient(135deg, var(--bg-color) 0%, #0a0e14 100%);
+    background: var(--bg-color);
     color: var(--text-primary);
     min-height: 100vh;
     line-height: 1.6;
@@ -59,21 +61,18 @@ body {
 .logo-icon {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.05));
+    background: #e3f2fd;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(52, 152, 219, 0.3);
+    border: 2px solid #bbdefb;
 }
 
 .logo-text h1 {
     font-size: 28px;
     font-weight: 700;
-    background: linear-gradient(135deg, #3498db, #5dade2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary-color);
 }
 
 .subtitle {
@@ -90,12 +89,12 @@ body {
 
 .badge {
     padding: 8px 16px;
-    background: rgba(52, 152, 219, 0.15);
-    border: 1px solid rgba(52, 152, 219, 0.3);
+    background: var(--primary-color);
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
-    color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(25, 118, 210, 0.2);
 }
 
 /* Main Content */
@@ -114,10 +113,7 @@ body {
     font-size: 36px;
     font-weight: 700;
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #ffffff, #a0aec0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
 }
 
 .intro-section p {
@@ -153,11 +149,12 @@ body {
 .category-icon {
     width: 50px;
     height: 50px;
-    background: rgba(52, 152, 219, 0.15);
+    background: var(--surface-light);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid var(--border-color);
 }
 
 .category-header h3 {
@@ -169,12 +166,11 @@ body {
 
 .coming-soon-badge {
     padding: 6px 14px;
-    background: rgba(149, 165, 166, 0.2);
-    border: 1px solid rgba(149, 165, 166, 0.3);
+    background: #e0e0e0;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
-    color: #95a5a6;
+    color: #757575;
 }
 
 /* Tool Card */
@@ -190,7 +186,7 @@ body {
 .tool-card:not(.disabled):hover {
     border-color: var(--primary-color);
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+    box-shadow: var(--hover-shadow);
 }
 
 .tool-card.disabled {
@@ -216,27 +212,27 @@ body {
 }
 
 .tool-icon.audio {
-    background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.05));
-    border: 2px solid rgba(52, 152, 219, 0.3);
+    background: #e3f2fd;
+    border: 2px solid #bbdefb;
     color: var(--primary-color);
 }
 
 .tool-icon.image {
-    background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(155, 89, 182, 0.05));
-    border: 2px solid rgba(155, 89, 182, 0.3);
-    color: #9b59b6;
+    background: #f3e5f5;
+    border: 2px solid #e1bee7;
+    color: #8e24aa;
 }
 
 .tool-icon.document {
-    background: linear-gradient(135deg, rgba(230, 126, 34, 0.2), rgba(230, 126, 34, 0.05));
-    border: 2px solid rgba(230, 126, 34, 0.3);
-    color: #e67e22;
+    background: #fff3e0;
+    border: 2px solid #ffe0b2;
+    color: #f57c00;
 }
 
 .tool-icon.disabled {
-    background: rgba(149, 165, 166, 0.1);
-    border-color: rgba(149, 165, 166, 0.2);
-    color: #95a5a6;
+    background: #f5f5f5;
+    border: 2px solid #e0e0e0;
+    color: #9e9e9e;
 }
 
 .tool-title {
@@ -259,15 +255,13 @@ body {
 }
 
 .tool-status.available {
-    background: rgba(39, 174, 96, 0.2);
-    color: var(--success-color);
-    border: 1px solid rgba(39, 174, 96, 0.3);
+    background: #c8e6c9;
+    color: #2e7d32;
 }
 
 .tool-status.coming-soon {
-    background: rgba(149, 165, 166, 0.2);
-    color: #95a5a6;
-    border: 1px solid rgba(149, 165, 166, 0.3);
+    background: #e0e0e0;
+    color: #757575;
 }
 
 .tool-description {
@@ -286,8 +280,7 @@ body {
 
 .feature-tag {
     padding: 6px 12px;
-    background: rgba(52, 152, 219, 0.1);
-    border: 1px solid rgba(52, 152, 219, 0.2);
+    background: #e3f2fd;
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
@@ -319,15 +312,21 @@ body {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     transition: all 0.3s;
+    text-decoration: none;
 }
 
 .btn-launch:hover {
     background: var(--primary-dark);
     transform: translateX(4px);
+}
+
+.btn-launch:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 /* Footer */
@@ -457,4 +456,44 @@ body {
 
 .tool-card {
     animation: fadeIn 0.5s ease-out;
+}
+
+/* Accessibility improvements */
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+*:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Ensure sufficient color contrast */
+::selection {
+    background: var(--primary-color);
+    color: #ffffff;
+}
+
+/* Skip to main content link for screen readers */
+.skip-to-main {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 999;
+    padding: 1em;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+}
+
+.skip-to-main:focus {
+    left: 0;
 }

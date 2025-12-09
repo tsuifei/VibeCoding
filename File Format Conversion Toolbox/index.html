@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-to-main">跳至主要內容</a>
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -32,7 +33,7 @@
         </header>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" id="main-content">
             <!-- Introduction -->
             <section class="intro-section">
                 <h2>專業的線上檔案格式轉換工具集</h2>
@@ -53,7 +54,7 @@
                     </div>
 
                     <!-- WAV to MP3 Tool Card -->
-                    <div class="tool-card" onclick="window.location.href='wav-to-mp3/index.html'">
+                    <div class="tool-card" role="article" aria-labelledby="wav-to-mp3-title">
                         <div class="tool-card-header">
                             <div class="tool-icon audio">
                                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -62,8 +63,8 @@
                                 </svg>
                             </div>
                             <div class="tool-title">
-                                <h4>WAV to MP3</h4>
-                                <span class="tool-status available">可用</span>
+                                <h4 id="wav-to-mp3-title">WAV to MP3</h4>
+                                <span class="tool-status available" role="status" aria-label="工具狀態">可用</span>
                             </div>
                         </div>
                         <p class="tool-description">
@@ -82,12 +83,12 @@
                                 </svg>
                                 即時轉換
                             </span>
-                            <button class="btn-launch">
+                            <a href="wav-to-mp3/index.html" class="btn-launch" role="button" aria-label="啟動 WAV to MP3 轉換工具">
                                 啟動工具
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                                     <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
