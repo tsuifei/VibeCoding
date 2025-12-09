@@ -36,9 +36,9 @@
 - PDF 文件轉換工具
 - 更多格式轉換工具...
 
-**📁 位置：** `File Format Conversion Toolbox/`
+**📁 位置：** `File-Format-Conversion-Toolbox/`
 
-**🔗 線上體驗：** [https://tsuifei.github.io/VibeCoding/File%20Format%20Conversion%20Toolbox/](https://tsuifei.github.io/VibeCoding/File%20Format%20Conversion%20Toolbox/)
+**🔗 線上體驗：** [https://tsuifei.github.io/VibeCoding/File-Format-Conversion-Toolbox/](https://tsuifei.github.io/VibeCoding/File-Format-Conversion-Toolbox/)
 
 ---
 
