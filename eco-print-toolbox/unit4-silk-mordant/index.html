@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>絲媒染與色蓋布計算機 - 巨人染植物移印染</title>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← 移印染工具箱</a>
+    <h1>絲媒染與色蓋布計算機</h1>
+    <p class="sub">依巨人染「植物移印染初階課程・單元四：絲與媒色蓋布」的配方比例，輸入布重與想調的染液量，自動算出媒染與兩種染液用量。</p>
+  </header>
+
+  <div class="card">
+    <h2>輸入布重</h2>
+    <div class="row" style="margin-bottom:0">
+      <label for="mainWeight">絲乾布重量（克）</label>
+      <input type="number" id="mainWeight" min="0" step="1" value="100" inputmode="decimal">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>① 媒染</h2>
+    <table class="result">
+      <tr><td class="name">水量（布重 × 30）</td><td class="val" id="outWater">–</td></tr>
+      <tr><td class="name">明礬（布重 20%）</td><td class="val" id="outAlum">–</td></tr>
+      <tr><td class="name">硫酸亞鐵／綠礬（布重 1%）</td><td class="val" id="outIron">–</td></tr>
+      <tr><td class="name">碳酸氫鈉／小蘇打（布重 10%）</td><td class="val" id="outSoda">–</td></tr>
+    </table>
+    <p class="note">以暖水化開媒染劑，將布泡浸約 30 分鐘。講義沒有列出絲的精練步驟比例，如需精練請比照其他單元動物性纖維作法（低溫、只加中性清潔劑）。</p>
+  </div>
+
+  <div class="card">
+    <h2>② 色蓋布染液（例：石榴皮）</h2>
+    <div class="row">
+      <label for="litersA">想煮多少公升染液</label>
+      <input type="number" id="litersA" min="0" step="0.5" value="1" inputmode="decimal">
+    </div>
+    <table class="result">
+      <tr><td class="name">石榴皮（15 克 / 公升）</td><td class="val" id="outMaterialA">–</td></tr>
+    </table>
+    <p class="note">取水加熱，以濾包袋裝染材，煮半小時，放涼。取植物染液浸色蓋布約 30 分鐘，平滑面朝下放置於本布表面。</p>
+  </div>
+
+  <div class="card">
+    <h2>③ 泡浸染液（例：茜草）</h2>
+    <div class="row">
+      <label for="litersB">想煮多少公升染液</label>
+      <input type="number" id="litersB" min="0" step="0.5" value="1" inputmode="decimal">
+    </div>
+    <table class="result">
+      <tr><td class="name">茜草（20 克 / 公升）</td><td class="val" id="outMaterialB">–</td></tr>
+    </table>
+    <p class="note">取水加熱，以濾包袋裝染材，煮半小時，放涼。取植物泡浸約一晚。</p>
+  </div>
+
+  <div class="card">
+    <h2>蒸煮與綜合成因</h2>
+    <div class="steam">
+      蒸煮時間：絲 1.5 – 2.5 小時<br>
+      顯色效果受多重因素影響：媒染、植物種類、植物狀態、水份調配、塑料布、蒸煮時間、蒸氣溫度、搗紮鬆緊度、外加染液
+    </div>
+  </div>
+
+  <footer>
+    資料來源：巨人染【脈絡(二)：植物移印染初階課程】單元四 絲與媒色蓋布<br>
+    講義部分內容手抄辨識，配方比例如有出入請以原始講義為準
+  </footer>
+</div>
+
+<script>
+function fmt(n){
+  if(!isFinite(n)) return '–';
+  return (Math.round(n*10)/10).toLocaleString('zh-TW');
+}
+function calc(){
+  const main = parseFloat(document.getElementById('mainWeight').value) || 0;
+  const litersA = parseFloat(document.getElementById('litersA').value) || 0;
+  const litersB = parseFloat(document.getElementById('litersB').value) || 0;
+
+  document.getElementById('outWater').textContent = `${fmt(main*30)} ml`;
+  document.getElementById('outAlum').textContent = `${fmt(main*0.20)} g`;
+  document.getElementById('outIron').textContent = `${fmt(main*0.01)} g`;
+  document.getElementById('outSoda').textContent = `${fmt(main*0.10)} g`;
+
+  document.getElementById('outMaterialA').textContent = `${fmt(litersA*15)} g`;
+  document.getElementById('outMaterialB').textContent = `${fmt(litersB*20)} g`;
+}
+document.getElementById('mainWeight').addEventListener('input', calc);
+document.getElementById('litersA').addEventListener('input', calc);
+document.getElementById('litersB').addEventListener('input', calc);
+calc();
+</script>
+</body>
+</html>

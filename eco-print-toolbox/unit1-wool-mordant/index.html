@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>羊毛媒染計算機 - 巨人染植物移印染</title>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← 移印染工具箱</a>
+    <h1>羊毛媒染計算機</h1>
+    <p class="sub">依巨人染「植物移印染初階課程・單元一：羊毛與鮮花」的配方比例，輸入布重自動算出精練與媒染各成分用量。</p>
+  </header>
+
+  <div class="card">
+    <h2>輸入布重</h2>
+    <div class="row" style="margin-bottom:0">
+      <label for="mainWeight">羊毛乾布重量（克）</label>
+      <input type="number" id="mainWeight" min="0" step="1" value="100" inputmode="decimal">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>① 精練</h2>
+    <table class="result">
+      <tr><td class="name">中性清潔劑（布重 2–3%）</td><td class="val" id="outDetergent">–</td></tr>
+    </table>
+    <p class="note">常溫水加入清潔劑，放入羊毛布料，慢升溫至 70 度，煮練 30 分鐘，過程中不時攪拌，後充分水洗。羊毛屬動物性纖維，不需鹼劑。水量講義未列固定比例，以能淹過布料為準。</p>
+  </div>
+
+  <div class="card">
+    <h2>② 媒染</h2>
+    <table class="result">
+      <tr><td class="name">水量（布重 × 30）</td><td class="val" id="outWater">–</td></tr>
+      <tr><td class="name">明礬（布重 15%）</td><td class="val" id="outAlum">–</td></tr>
+      <tr><td class="name">硫酸亞鐵／綠礬（布重 0.4%）</td><td class="val" id="outIron">–</td></tr>
+    </table>
+    <p class="note">以暖水化開媒染劑，溶於水中，將布泡浸約半小時，過程中需不時輕輕攪動揉搓。媒染液最好現調現用，放久會失去化學作用。進行媒染時請戴口罩及手套，於通風地方進行。</p>
+  </div>
+
+  <div class="card">
+    <h2>水蓋布（Water Blanket）</h2>
+    <div class="steam">
+      擺放次序：塑料布（最大）＞本布／印布（最小）＞植物＞（可加塑膠布隔離水份）＞水蓋布（中）<br>
+      材質：棉質、線圈布（魚鱗布）<br>
+      作用：抵消立體高低差、吸收水份與單寧<br>
+      用後清洗：過碳酸鈉浸泡過夜，再漂洗乾淨可重複使用<br>
+      講義未列水蓋布用量比例，無法計算，依實際覆蓋面積準備即可。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>蒸煮時間</h2>
+    <div class="steam">羊毛：1.5 – 2.5 小時<br>「成也水份，敗也水份」——植物、本布、蓋布、外加水份四者要一起調和</div>
+  </div>
+
+  <footer>
+    資料來源：巨人染【脈絡(二)：植物移印染初階課程】單元一 羊毛與鮮花<br>
+    講義部分內容手抄辨識，配方比例如有出入請以原始講義為準
+  </footer>
+</div>
+
+<script>
+function fmt(n){
+  if(!isFinite(n)) return '–';
+  return (Math.round(n*10)/10).toLocaleString('zh-TW');
+}
+function calc(){
+  const main = parseFloat(document.getElementById('mainWeight').value) || 0;
+  document.getElementById('outDetergent').textContent =
+    main>0 ? `${fmt(main*0.02)} – ${fmt(main*0.03)} g` : '–';
+  document.getElementById('outWater').textContent = `${fmt(main*30)} ml`;
+  document.getElementById('outAlum').textContent = `${fmt(main*0.15)} g`;
+  document.getElementById('outIron').textContent = `${fmt(main*0.004)} g`;
+}
+document.getElementById('mainWeight').addEventListener('input', calc);
+calc();
+</script>
+</body>
+</html>

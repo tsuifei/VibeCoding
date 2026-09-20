@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>羊毛色蓋布計算機 - 巨人染植物移印染</title>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← 移印染工具箱</a>
+    <h1>羊毛色蓋布計算機</h1>
+    <p class="sub">依巨人染「植物移印染初階課程・單元二：羊毛與色蓋布」的配方比例，輸入布重與想調的染液量，自動算出精練、媒染、色蓋布染液用量。</p>
+  </header>
+
+  <div class="card">
+    <h2>輸入布重</h2>
+    <div class="row" style="margin-bottom:0">
+      <label for="mainWeight">羊毛乾布重量（克）</label>
+      <input type="number" id="mainWeight" min="0" step="1" value="100" inputmode="decimal">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>① 精練</h2>
+    <table class="result">
+      <tr><td class="name">中性清潔劑（布重 2–3%）</td><td class="val" id="outDetergent">–</td></tr>
+    </table>
+    <p class="note">常溫水加入清潔劑，放入羊毛布料，慢升溫至 70 度，煮練半小時，過程中不時攪拌，後充分水洗。</p>
+  </div>
+
+  <div class="card">
+    <h2>② 媒染</h2>
+    <table class="result">
+      <tr><td class="name">水量（布重 × 30）</td><td class="val" id="outWater">–</td></tr>
+      <tr><td class="name">明礬（布重 15%）</td><td class="val" id="outAlum">–</td></tr>
+      <tr><td class="name">硫酸亞鐵／綠礬（布重 0.4%）</td><td class="val" id="outIron">–</td></tr>
+    </table>
+    <p class="note">以暖水化開媒染劑，溶於水中，將布泡浸約半小時，過程中不時輕輕攪動揉捏。請戴口罩及手套，於通風地方進行。</p>
+  </div>
+
+  <div class="card">
+    <h2>③ 色蓋布染液萃取</h2>
+    <div class="row">
+      <label for="liters">想煮多少公升染液</label>
+      <input type="number" id="liters" min="0" step="0.5" value="1" inputmode="decimal">
+    </div>
+    <table class="result">
+      <tr><td class="name">染材（例：墨水樹，20 克 / 公升）</td><td class="val" id="outDyeMaterial">–</td></tr>
+    </table>
+    <p class="note">取水加熱，以湯包袋裝起染材，煮半小時，放涼即為染液。取棉蓋布泡浸約 30 分鐘，平滑面朝下放置於本布表面。</p>
+    <p class="note">[?] 講義另有「本布 1 公斤 ⇒ 15 公升染液」的用量換算手寫筆記，字跡不確定（旁邊還有一個看不清的「300g」），沒有直接換算進本計算機，需要的染液量請自行評估後填入上方欄位。</p>
+  </div>
+
+  <div class="card">
+    <h2>色蓋布使用重點</h2>
+    <div class="steam">
+      擺放次序：塑料布（最大）＞本布（最小）＞植物＞色蓋布（中）<br>
+      材質：棉質線圈布<br>
+      作用：清晰邊界、夾帶染液賦予底色、與植物染液產生反應呈現不同顏色、植物選材較不受限（適用無單寧或酸性植物）<br>
+      染液吸收太少：本布邊界易產生皺摺；吸收太多：邊界模糊，兩者都要抓平衡<br>
+      建議用捲的方式一邊蓋一邊捲
+    </div>
+  </div>
+
+  <footer>
+    資料來源：巨人染【脈絡(二)：植物移印染初階課程】單元二 羊毛與色蓋布<br>
+    講義部分內容手抄辨識，配方比例如有出入請以原始講義為準
+  </footer>
+</div>
+
+<script>
+function fmt(n){
+  if(!isFinite(n)) return '–';
+  return (Math.round(n*10)/10).toLocaleString('zh-TW');
+}
+function calc(){
+  const main = parseFloat(document.getElementById('mainWeight').value) || 0;
+  const liters = parseFloat(document.getElementById('liters').value) || 0;
+
+  document.getElementById('outDetergent').textContent =
+    main>0 ? `${fmt(main*0.02)} – ${fmt(main*0.03)} g` : '–';
+  document.getElementById('outWater').textContent = `${fmt(main*30)} ml`;
+  document.getElementById('outAlum').textContent = `${fmt(main*0.15)} g`;
+  document.getElementById('outIron').textContent = `${fmt(main*0.004)} g`;
+
+  document.getElementById('outDyeMaterial').textContent = `${fmt(liters*20)} g`;
+}
+document.getElementById('mainWeight').addEventListener('input', calc);
+document.getElementById('liters').addEventListener('input', calc);
+calc();
+</script>
+</body>
+</html>

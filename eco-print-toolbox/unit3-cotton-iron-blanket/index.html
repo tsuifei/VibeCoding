@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>棉布＋鐵蓋布媒染計算機 - 巨人染植物移印染</title>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← 移印染工具箱</a>
+    <h1>棉布＋鐵蓋布媒染計算機</h1>
+    <p class="sub">依巨人染「植物移印染初階課程・單元三：棉布染色鐵化」的配方比例，輸入布重自動算出精練與媒染各成分用量。</p>
+  </header>
+
+  <div class="card">
+    <h2>輸入布重</h2>
+    <div class="row">
+      <label for="mainWeight">本布重量（克）</label>
+      <input type="number" id="mainWeight" min="0" step="1" value="100" inputmode="decimal">
+    </div>
+    <div class="row" style="margin-bottom:0">
+      <label for="ironWeight">鐵蓋布重量（克）</label>
+      <input type="number" id="ironWeight" min="0" step="1" value="100" inputmode="decimal">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>① 精練（本布）</h2>
+    <table class="result">
+      <tr><td class="name">鹼劑（布重 2–3%）</td><td class="val" id="outAlkali">–</td></tr>
+      <tr><td class="name">中性清潔劑（布重 0.5%）</td><td class="val" id="outDetergent">–</td></tr>
+    </table>
+    <p class="note">常溫水加入鹼劑與清潔劑，放入棉布，煮沸半小時，過程中需不時攪拌，後充分水洗。水量講義未列固定比例，以能淹過布料為準。</p>
+  </div>
+
+  <div class="card">
+    <h2>② 媒染（本布）</h2>
+    <table class="result">
+      <tr><td class="name">水量（布重 × 30）</td><td class="val" id="outMainWater">–</td></tr>
+      <tr><td class="name">明礬（布重 20%）</td><td class="val" id="outMainAlum">–</td></tr>
+      <tr><td class="name">硫酸亞鐵／綠礬（布重 2%）</td><td class="val" id="outMainIron">–</td></tr>
+      <tr><td class="name">碳酸氫鈉／小蘇打（布重 10%）</td><td class="val" id="outMainSoda">–</td></tr>
+    </table>
+    <p class="note">以暖水化開媒染劑，將布泡浸約半小時，過程中需不時攪動。</p>
+  </div>
+
+  <div class="card iron">
+    <h2>③ 媒染（鐵蓋布） <span class="tag">Iron Blanket</span></h2>
+    <table class="result">
+      <tr><td class="name">水量（布重 × 30）</td><td class="val" id="outIronWater">–</td></tr>
+      <tr><td class="name">硫酸亞鐵／綠礬（布重 5%）</td><td class="val" id="outIronIron">–</td></tr>
+    </table>
+    <p class="note">鐵蓋布單獨媒染，只需泡硫酸亞鐵，不需明礬與小蘇打。擺放次序：塑料布（最大）＞本布（最小）＞植物＞鐵蓋布（中）。</p>
+  </div>
+
+  <div class="card">
+    <h2>蒸煮與捆紮</h2>
+    <div class="steam">
+      蒸煮時間：棉布 1–2 小時<br>
+      捲：受力平均、清晰，但受棒子或蒸具大小限制<br>
+      摺：不受尺寸限制，但受力不均容易產生鬆縐
+    </div>
+  </div>
+
+  <footer>
+    資料來源：巨人染【脈絡(二)：植物移印染初階課程】單元三 棉布與鐵蓋布<br>
+    講義部分內容手抄辨識，配方比例如有出入請以原始講義為準
+  </footer>
+</div>
+
+<script>
+function fmt(n){
+  if(!isFinite(n)) return '–';
+  return (Math.round(n*10)/10).toLocaleString('zh-TW');
+}
+function calc(){
+  const main = parseFloat(document.getElementById('mainWeight').value) || 0;
+  const iron = parseFloat(document.getElementById('ironWeight').value) || 0;
+
+  document.getElementById('outAlkali').textContent =
+    main>0 ? `${fmt(main*0.02)} – ${fmt(main*0.03)} g` : '–';
+  document.getElementById('outDetergent').textContent = `${fmt(main*0.005)} g`;
+
+  document.getElementById('outMainWater').textContent = `${fmt(main*30)} ml`;
+  document.getElementById('outMainAlum').textContent = `${fmt(main*0.20)} g`;
+  document.getElementById('outMainIron').textContent = `${fmt(main*0.02)} g`;
+  document.getElementById('outMainSoda').textContent = `${fmt(main*0.10)} g`;
+
+  document.getElementById('outIronWater').textContent = `${fmt(iron*30)} ml`;
+  document.getElementById('outIronIron').textContent = `${fmt(iron*0.05)} g`;
+}
+document.getElementById('mainWeight').addEventListener('input', calc);
+document.getElementById('ironWeight').addEventListener('input', calc);
+calc();
+</script>
+</body>
+</html>
