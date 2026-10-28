@@ -11,7 +11,6 @@
 | └ WAV to MP3 | 音訊轉檔 | [開啟](https://tsuifei.github.io/VibeCoding/File-Format-Conversion-Toolbox/wav-to-mp3/) |
 | └ PNG/JPG to WebP | 圖片轉 WebP | [開啟](https://tsuifei.github.io/VibeCoding/File-Format-Conversion-Toolbox/image-to-webp/) |
 | └ Image Compressor | 圖片壓縮 | [開啟](https://tsuifei.github.io/VibeCoding/File-Format-Conversion-Toolbox/image-compressor/) |
-| Eco Print Toolbox | 植物移印染配方計算機 | [開啟](https://tsuifei.github.io/VibeCoding/eco-print-toolbox/) |
 | Le Cartomètre | 書殼尺寸計算器（裝幀） | [開啟](https://tsuifei.github.io/VibeCoding/le-cartometre/) |
 | Essential Oils Order System | 精油訂購系統（Google Apps Script） | 需部署到自己的 GAS，見下方說明 |
 | GAS Newsletters | Gmail 電子報整理到 Drive（Google Apps Script） | 需部署到自己的 GAS，見下方說明 |
@@ -99,22 +98,7 @@ clasp deploy
 
 ---
 
-### 4. Eco Print Toolbox
-植物移印染工具箱 - 配方計算、參數速查
-
-**已包含工具：**
-- **單元一・羊毛媒染計算機** - 精練清潔劑、媒染明礬與綠礬用量
-- **單元二・羊毛色蓋布計算機** - 精練、媒染，加上色蓋布染液萃取用量
-- **單元三・棉布＋鐵蓋布媒染計算機** - 精練、本布媒染、鐵蓋布媒染三段式計算
-- **單元四・絲媒染與色蓋布計算機** - 媒染，加上石榴皮／茜草兩種染液萃取用量
-
-**📁 位置：** `eco-print-toolbox/`
-
-**🔗 線上體驗：** [https://tsuifei.github.io/VibeCoding/eco-print-toolbox/](https://tsuifei.github.io/VibeCoding/eco-print-toolbox/)
-
----
-
-### 5. Le Cartomètre
+### 4. Le Cartomètre
 書殼尺寸計算器 - 精裝書（reliure cartonnée）書殼紙板裁切尺寸計算
 
 **功能特色：**
@@ -130,7 +114,7 @@ clasp deploy
 
 ---
 
-### 6. GAS Newsletters
+### 5. GAS Newsletters
 電子報整理工具 - 自動將 Gmail 電子報整理到 Google Drive
 
 **功能特色：**
