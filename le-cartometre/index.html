@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Cartomètre</title>
+<style>
+  :root {
+    --bg: #fdf8f2;
+    --header: #5a3319;
+    --btn: #8b5e3c;
+    --accent: #d4b896;
+    --muted: #8b6347;
+    --muted2: #a07850;
+    --input-bg: #fff9f2;
+    --formula-bg: #fdf4ec;
+    --kraft: #e8d5b7;
+    --plats: #c8a882;
+    --dos: #8b5e3c;
+    --r: 4px;
+    --serif: Georgia, "Times New Roman", serif;
+    --ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--header); font-family: var(--serif); line-height: 1.5; }
+  header { background: var(--header); color: var(--bg); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  header h1 { margin: 0; font-size: 1.35rem; font-weight: normal; }
+  header p { margin: 0; font-size: .8rem; opacity: .8; font-family: var(--ui); }
+  .lang { display: flex; gap: 4px; flex-shrink: 0; }
+  .lang button { font: 600 .8rem var(--ui); background: transparent; color: var(--bg); border: 1px solid var(--accent); border-radius: var(--r); padding: 4px 8px; opacity: .45; cursor: pointer; }
+  .lang button.on { opacity: 1; background: var(--btn); }
+  main { max-width: 560px; margin: 0 auto; padding: 16px; }
+  section { border: 1px solid var(--accent); border-radius: var(--r); padding: 14px; margin-bottom: 16px; background: #fff; }
+  h2 { margin: 0 0 10px; font-size: 1.05rem; font-weight: normal; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  label { display: block; font: 600 .85rem var(--ui); }
+  label i { display: block; font: italic .8rem var(--serif); color: var(--muted2); }
+  .field { position: relative; margin-top: 4px; }
+  .field input { width: 100%; font: 1rem var(--mono); padding: 8px 34px 8px 8px; border: 1px solid var(--accent); border-radius: var(--r); background: var(--input-bg); color: var(--header); }
+  .field span { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font: .8rem var(--ui); color: var(--muted2); pointer-events: none; }
+  .hint { font: .75rem var(--ui); color: var(--muted2); margin-top: 2px; }
+  details > summary { cursor: pointer; font: .85rem var(--ui); color: var(--muted); list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::before { content: "▶ "; font-size: .7em; }
+  details[open] > summary::before { content: "▼ "; }
+  .materials { margin-top: 12px; border-top: 1px dashed var(--accent); padding-top: 10px; }
+  .materials .grid2 { margin-top: 10px; }
+  .calc { display: block; width: 100%; padding: 12px; font: 600 1rem var(--ui); color: #fff; background: var(--btn); border: 0; border-radius: var(--r); cursor: pointer; margin-bottom: 16px; }
+  .calc:hover { background: var(--header); }
+  .err { color: #a33; font: .85rem var(--ui); margin: -8px 0 16px; }
+  .card { border: 1px solid var(--accent); border-radius: var(--r); padding: 10px; background: var(--input-bg); }
+  .card .k { font: .8rem var(--ui); color: var(--muted); }
+  .card .v { font: 1.3rem var(--mono); }
+  .formula { background: var(--formula-bg); color: var(--btn); font: .78rem var(--mono); padding: 8px; border-radius: var(--r); margin-top: 6px; white-space: pre-wrap; word-break: break-word; }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); }
+  th { font: 600 .8rem var(--ui); color: var(--muted); text-align: left; border-bottom: 1px solid var(--accent); padding: 6px 4px; }
+  td { padding: 6px 4px; }
+  tr.f td { padding-top: 0; border-bottom: 1px solid #f0e4d4; }
+  td:first-child { font-weight: bold; }
+  .legend { list-style: none; padding: 0; margin: 0 0 12px; font-family: var(--ui); font-size: .9rem; }
+  .legend li { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+  .legend .sw { width: 18px; height: 18px; border-radius: 3px; border: 1px solid var(--muted2); flex-shrink: 0; }
+  .legend .dim { margin-left: auto; font-family: var(--mono); }
+  .legend small { color: var(--muted2); }
+  svg { width: 100%; height: auto; display: block; }
+  .note { font: italic .78rem var(--serif); color: var(--muted2); margin-top: 8px; }
+  #results[hidden] { display: none; }
+  @media (max-width: 380px) {
+    .field input { font-size: .9rem; padding-right: 28px; }
+    label { font-size: .75rem; }
+    header h1 { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Le Cartomètre</h1>
+    <p data-t="subtitle"></p>
+  </div>
+  <div class="lang">
+    <button data-lang="fr">FR</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="zh">中文</button>
+  </div>
+</header>
+
+<main>
+  <form id="form" novalidate>
+    <section>
+      <h2 data-t="corps"></h2>
+      <div class="grid3">
+        <div><label for="H"><span data-t="hauteur"></span><i>H</i></label><div class="field"><input id="H" type="number" inputmode="decimal" min="1" step="0.5" placeholder="210"><span>mm</span></div></div>
+        <div><label for="l"><span data-t="largeur"></span><i>l</i></label><div class="field"><input id="l" type="number" inputmode="decimal" min="1" step="0.5" placeholder="148"><span>mm</span></div></div>
+        <div><label for="e"><span data-t="epaisseur"></span><i>é</i></label><div class="field"><input id="e" type="number" inputmode="decimal" min="0.5" step="0.5" placeholder="22"><span>mm</span></div></div>
+      </div>
+
+      <details class="materials">
+        <summary data-t="modifiable"></summary>
+        <div class="grid2">
+          <div><label for="ec"><span data-t="ecarton"></span><i>é carton</i></label><div class="field"><input id="ec" type="number" inputmode="decimal" min="0.5" step="0.1" value="2"><span>mm</span></div><div class="hint">⚙ <span data-t="default"></span> : 2 mm</div></div>
+          <div><label for="et"><span data-t="etoile"></span><i>é toile</i></label><div class="field"><input id="et" type="number" inputmode="decimal" min="0" step="0.1" value="0.5"><span>mm</span></div><div class="hint">⚙ <span data-t="default"></span> : 0.5 mm</div></div>
+        </div>
+      </details>
+    </section>
+
+    <button type="submit" class="calc" data-t="calculer"></button>
+    <p class="err" id="err" hidden data-t="error"></p>
+  </form>
+
+  <div id="results" hidden>
+    <section class="grid2">
+      <div class="card"><div class="k" data-t="chasse"></div><div class="v" id="vChasse"></div><details><summary data-t="formule"></summary><div class="formula" id="fChasse"></div></details></div>
+      <div class="card"><div class="k" data-t="charniere"></div><div class="v" id="vCharn"></div><details><summary data-t="formule"></summary><div class="formula" id="fCharn"></div></details></div>
+    </section>
+
+    <section>
+      <table>
+        <thead><tr><th data-t="piece"></th><th>H</th><th>l</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 data-t="couper"></h2>
+      <ul class="legend" id="legend"></ul>
+      <h2 data-t="schema"></h2>
+      <div id="svgWrap"></div>
+      <p class="note" data-t="schemaNote"></p>
+    </section>
+  </div>
+</main>
+
+<script>
+const I18N = {
+  fr: {
+    subtitle: "Calculateur de carcasse · Reliure cartonnée",
+    corps: "Corps d'ouvrage", hauteur: "Hauteur", largeur: "Largeur", epaisseur: "Épaisseur",
+    modifiable: "Matériaux — valeurs modifiables", ecarton: "Épaisseur carton", etoile: "Épaisseur toile",
+    default: "valeur par défaut", calculer: "Calculer ▶", error: "Remplissez H, l et é avec des valeurs positives.",
+    chasse: "Chasse", charniere: "Charnière", formule: "Formule", piece: "Pièce",
+    dos: "Dos", plats: "Plats", kraft: "Papier kraft",
+    couper: "Dimensions à couper", schema: "Schéma de la carcasse",
+    carton: "carton gris", kraftMat: "papier kraft",
+    schemaNote: "Schéma indicatif : le kraft couvre le dos et déborde de 20 mm sur chaque plat.",
+  },
+  en: {
+    subtitle: "Bookbinding Cover Calculator",
+    corps: "Text block", hauteur: "Height", largeur: "Width", epaisseur: "Thickness",
+    modifiable: "Materials — editable values", ecarton: "Board thickness", etoile: "Cloth thickness",
+    default: "default value", calculer: "Calculate ▶", error: "Fill in H, l and é with positive values.",
+    chasse: "Overhang", charniere: "Hinge gap", formule: "Formula", piece: "Piece",
+    dos: "Spine board", plats: "Cover boards", kraft: "Kraft paper",
+    couper: "Cutting dimensions", schema: "Cover layout diagram",
+    carton: "grey board", kraftMat: "kraft paper",
+    schemaNote: "Schematic only: the kraft covers the spine and overlaps each cover board by 20 mm.",
+  },
+  zh: {
+    subtitle: "書殼尺寸計算器",
+    corps: "書本體", hauteur: "高度", largeur: "寬度", epaisseur: "厚度",
+    modifiable: "材料厚度 — 可修改", ecarton: "紙板厚度", etoile: "布料厚度",
+    default: "預設值", calculer: "計算 ▶", error: "請填入大於 0 的 H、l、é。",
+    chasse: "書口出血", charniere: "鉸鏈", formule: "公式", piece: "部件",
+    dos: "書背板", plats: "封面板", kraft: "牛皮紙",
+    couper: "裁切尺寸", schema: "書殼俯視圖",
+    carton: "灰紙板", kraftMat: "牛皮紙",
+    schemaNote: "示意圖：牛皮紙蓋住書背，左右各延伸 20 mm 到封面板上。",
+  },
+};
+
+let lang = "fr";
+let last = null;
+const $ = (id) => document.getElementById(id);
+const num = (id) => parseFloat($(id).value);
+const fmt = (n) => +n.toFixed(2) + "";
+
+function compute(H, l, e, ec, et) {
+  const chasse = Math.max(ec, 1.5);
+  const charnRaw = 2 * ec + 2 * et + 1.5;
+  const charn = Math.ceil(charnRaw / 0.5) * 0.5;
+  const dos = { H: H + 2 * chasse, l: e + ec };
+  const plats = { H: H + 2 * chasse, l: l + 10 };
+  const kraft = { H: plats.H + 20, l: dos.l + 2 * charn + 40 };
+  return { H, l, e, ec, et, chasse, charnRaw, charn, dos, plats, kraft };
+}
+
+function render() {
+  const t = I18N[lang];
+  document.documentElement.lang = lang === "zh" ? "zh-Hant" : lang;
+  document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t[el.dataset.t]; });
+  document.querySelectorAll(".lang button").forEach((b) => b.classList.toggle("on", b.dataset.lang === lang));
+  if (!last) return;
+  const r = last;
+
+  $("vChasse").textContent = fmt(r.chasse) + " mm";
+  $("vCharn").textContent = fmt(r.charn) + " mm";
+  $("fChasse").textContent = `Chasse = max(é carton, 1.5) = max(${fmt(r.ec)}, 1.5) = ${fmt(r.chasse)} mm`;
+  $("fCharn").textContent =
+    `Charnière = 2×é carton + 2×é toile + 1.5\n= ${fmt(2 * r.ec)} + ${fmt(2 * r.et)} + 1.5 = ${fmt(r.charnRaw)}` +
+    (r.charn !== r.charnRaw ? `\n→ ${fmt(r.charn)} mm` : " mm");
+
+  const rows = [
+    ["DOS", r.dos, `DOS : H = H + 2×chasse = ${fmt(r.H)} + ${fmt(2 * r.chasse)} = ${fmt(r.dos.H)} mm\nDOS : l = é + é carton = ${fmt(r.e)} + ${fmt(r.ec)} = ${fmt(r.dos.l)} mm`],
+    ["PLATS", r.plats, `PLATS : H = H + 2×chasse = ${fmt(r.H)} + ${fmt(2 * r.chasse)} = ${fmt(r.plats.H)} mm\nPLATS : l = l + 10 = ${fmt(r.l)} + 10 = ${fmt(r.plats.l)} mm`],
+    ["KRAFT", r.kraft, `KRAFT : H = H plats + 20 = ${fmt(r.plats.H)} + 20 = ${fmt(r.kraft.H)} mm\nKRAFT : l = l dos + 2×charnière + 40 = ${fmt(r.dos.l)} + ${fmt(2 * r.charn)} + 40 = ${fmt(r.kraft.l)} mm`],
+  ];
+  $("tbody").innerHTML = rows.map(([name, d, f]) =>
+    `<tr><td>${name}</td><td>${fmt(d.H)} mm</td><td>${fmt(d.l)} mm</td></tr>` +
+    `<tr class="f"><td colspan="3"><details><summary>${t.formule}</summary><div class="formula">${f}</div></details></td></tr>`
+  ).join("");
+
+  $("legend").innerHTML = [
+    ["var(--kraft)", "KRAFT", t.kraftMat, r.kraft],
+    ["var(--plats)", "PLATS ×2", t.carton, r.plats],
+    ["var(--dos)", "DOS ×1", t.carton, r.dos],
+  ].map(([c, n, m, d]) =>
+    `<li><span class="sw" style="background:${c}"></span><span>${n} <small>${m}</small></span><span class="dim">${fmt(d.H)} × ${fmt(d.l)} mm</span></li>`
+  ).join("");
+
+  $("svgWrap").innerHTML = svg(r);
+}
+
+function svg(r) {
+  // Layout in mm: PLAT | charnière | DOS | charnière | PLAT ; kraft centred on the spine.
+  const pad = 26;
+  const totalW = 2 * r.plats.l + 2 * r.charn + r.dos.l;
+  const x0 = pad, y0 = pad + 10;
+  const kx = x0 + r.plats.l + r.charn + r.dos.l / 2 - r.kraft.l / 2;
+  const ky = y0 - (r.kraft.H - r.plats.H) / 2;
+  const dosX = x0 + r.plats.l + r.charn;
+  const rightX = dosX + r.dos.l + r.charn;
+  const W = totalW + 2 * pad, Hh = r.kraft.H + 2 * pad + 20;
+  const fs = Math.max(totalW, r.kraft.H) / 40;
+  const arrow = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#5a3319" stroke-width="${fs / 8}" marker-start="url(#a)" marker-end="url(#a)"/>`;
+  const txt = (x, y, s, rot) => `<text x="${x}" y="${y}" font-size="${fs}" fill="#5a3319" text-anchor="middle" font-family="monospace"${rot ? ` transform="rotate(-90 ${x} ${y})"` : ""}>${s}</text>`;
+  const yb = ky + r.kraft.H + fs * 1.4;
+  return `<svg viewBox="0 0 ${W} ${Hh}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schéma">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#5a3319"/></marker>
+    <pattern id="h" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#a07850" stroke-width="1"/></pattern>
+  </defs>
+  <rect x="${kx}" y="${ky}" width="${r.kraft.l}" height="${r.kraft.H}" fill="#e8d5b7" stroke="#a07850" stroke-width="${fs / 10}"/>
+  <rect x="${x0}" y="${y0}" width="${r.plats.l}" height="${r.plats.H}" fill="#c8a882" fill-opacity=".9" stroke="#8b6347" stroke-width="${fs / 10}"/>
+  <rect x="${x0 + r.plats.l}" y="${y0}" width="${r.charn}" height="${r.plats.H}" fill="url(#h)"/>
+  <rect x="${dosX}" y="${y0}" width="${r.dos.l}" height="${r.dos.H}" fill="#8b5e3c" stroke="#5a3319" stroke-width="${fs / 10}"/>
+  <rect x="${dosX + r.dos.l}" y="${y0}" width="${r.charn}" height="${r.plats.H}" fill="url(#h)"/>
+  <rect x="${rightX}" y="${y0}" width="${r.plats.l}" height="${r.plats.H}" fill="#c8a882" fill-opacity=".9" stroke="#8b6347" stroke-width="${fs / 10}"/>
+  ${arrow(dosX, ky - fs * 0.6, dosX + r.dos.l, ky - fs * 0.6)}${txt(dosX + r.dos.l / 2, ky - fs * 1.1, "DOS " + fmt(r.dos.l))}
+  ${arrow(kx, yb, kx + r.kraft.l, yb)}${txt(kx + r.kraft.l / 2, yb + fs * 1.3, "KRAFT " + fmt(r.kraft.l))}
+  ${arrow(x0 - fs * 0.8, ky, x0 - fs * 0.8, ky + r.kraft.H)}${txt(x0 - fs * 1.3, ky + r.kraft.H / 2, "H " + fmt(r.kraft.H), true)}
+  ${txt(x0 + r.plats.l + r.charn / 2 + fs * 0.35, y0 + r.plats.H / 2, fmt(r.charn), true)}
+  ${txt(x0 + r.plats.l / 2, y0 + r.plats.H / 2, "PLAT")}${txt(rightX + r.plats.l / 2, y0 + r.plats.H / 2, "PLAT")}
+</svg>`;
+}
+
+$("form").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const v = ["H", "l", "e", "ec", "et"].map(num);
+  const ok = v.slice(0, 4).every((x) => x > 0) && v[4] >= 0;
+  $("err").hidden = ok;
+  if (!ok) return;
+  last = compute(...v);
+  $("results").hidden = false;
+  render();
+  $("results").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => {
+  lang = b.dataset.lang;
+  try { localStorage.setItem("cartometre-lang", lang); } catch (_) {}
+  render();
+}));
+
+try { lang = localStorage.getItem("cartometre-lang") || "fr"; } catch (_) {}
+if (!I18N[lang]) lang = "fr";
+render();
+</script>
+</body>
+</html>
