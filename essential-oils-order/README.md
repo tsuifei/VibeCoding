@@ -8,55 +8,55 @@
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - 詳細的部署步驟和常見問題
 - **[ADMIN_ACCOUNT_SETUP.md](ADMIN_ACCOUNT_SETUP.md)** - 管理帳號設定說明
 - **[OAUTH_LOGIN_GUIDE.md](OAUTH_LOGIN_GUIDE.md)** - OAuth 登入功能說明與設定指南
-- **[DEPLOY_WITH_ADMIN_ACCOUNT.md](DEPLOY_WITH_ADMIN_ACCOUNT.md)** - 使用管理帳號部署指南（推薦！）
+- **[DEPLOY_WITH_ADMIN_ACCOUNT.md](DEPLOY_WITH_ADMIN_ACCOUNT.md)** - 使用管理帳號部署指南（建議！）
 - **[CLEANUP_OLD_DEPLOYMENT.md](CLEANUP_OLD_DEPLOYMENT.md)** - 清理舊部署指南
 
 ## 🔐 管理帳號與資料夾
 
-本系統已配置：
+本系統已設定：
 - **管理帳號**：`hello2paris@gmail.com`
 - **資料夾名稱**：「精油訂購APP」
 
 ### 💾 資料儲存方式（兩種選擇）
 
-#### 方式 1：直接儲存在管理帳號（推薦）✨
-- 使用 `hello2paris@gmail.com` 帳號部署應用
+#### 方式 1：直接儲存在管理帳號（建議）✨
+- 使用 `hello2paris@gmail.com` 帳號部署
 - 所有資料直接儲存在該帳號的 Google Drive 中
 - 資料位置：`hello2paris@gmail.com` 的 Drive → `精油訂購APP` 資料夾
 - **部署指南**：請參考 [DEPLOY_WITH_ADMIN_ACCOUNT.md](DEPLOY_WITH_ADMIN_ACCOUNT.md)
 
-#### 方式 2：部署後共享給管理帳號
-- 使用任何 Google 帳號部署應用
+#### 方式 2：部署後共用給管理帳號
+- 使用任何 Google 帳號部署
 - 資料儲存在部署者的 Drive 中
-- 系統會自動共享給 `hello2paris@gmail.com`
+- 系統會自動共用給 `hello2paris@gmail.com`
 - **部署指南**：請參考 [DEPLOYMENT.md](DEPLOYMENT.md) 和 [ADMIN_ACCOUNT_SETUP.md](ADMIN_ACCOUNT_SETUP.md)
 
 ## 功能特色
 
 ### 🔐 安全登入系統（NEW! v2.0）
 - **Google OAuth 2.0 登入**：完整的 OAuth 2.0 認證流程
-- **登入頁面**：美觀的登入介面，支援 Google 帳號
-- **用戶資訊顯示**：登入後顯示用戶 Email 和登出按鈕
-- **登出功能**：完善的登出流程和說明
-- **Facebook 登入**：預留接口，待實作（按鈕已顯示為「即將推出」）
+- **登入頁面**：好看的登入介面，支援 Google 帳號
+- **使用者資訊顯示**：登入後顯示使用者 Email 和登出按鈕
+- **登出功能**：完整的登出流程和說明
+- **Facebook 登入**：保留介面，待實作（按鈕已顯示為「即將推出」）
 
 ### 🌿 訂購功能
 - **多語言精油資訊**：包含繁體中文名稱、拉丁文學名、法文名稱
 - **多尺寸選擇**：支援不同容量（5ml、10ml、30ml）
 - **即時價格計算**：根據選擇的尺寸和數量自動計算價格
-- **購物車功能**：可以選擇多種精油後一次結帳
+- **購物車功能**：可以挑好幾種精油再一次結帳
 - **訂單來源追蹤**：每筆訂單都會記錄登入帳號
 
 ### 📊 管理功能
-- **自動記錄到 Google Sheets**：訂單自動儲存，方便管理和追蹤
-- **產品列表可自訂**：精油產品清單可從 Google Sheet 讀取，方便更新
+- **自動記錄到 Google Sheets**：訂單自動儲存，方便管理、追蹤
+- **產品列表可自訂**：精油商品清單可從 Google Sheet 讀取，方便更新
 - **自動資料夾管理**：所有 Sheets 自動整理到指定資料夾
-- **多人協作**：自動共享給管理帳號
+- **多人共同管理**：自動共用給管理帳號
 
 ### 🎨 使用者體驗
-- **響應式設計**：支援桌面和行動裝置
-- **美觀介面**：漸變背景、圓角設計、流暢動畫
-- **即時反饋**：操作成功/失敗都有明確提示
+- **響應式設計**：支援電腦和手機
+- **介面好看**：漸層背景、圓角設計、流暢動畫
+- **即時回饋**：操作成功／失敗都有明確提示
 
 ## 內建精油清單
 
@@ -92,7 +92,7 @@ cd gas/essential-oils-order
 clasp create --title "精油訂購系統" --type webapp
 ```
 
-這會在當前目錄生成 `.clasp.json` 文件，其中包含 `scriptId`。
+這會在目前資料夾產生 `.clasp.json` 檔案，其中包含 `scriptId`。
 
 ### 4. 推送程式碼到 Google Apps Script
 
@@ -123,37 +123,37 @@ clasp open
    - 執行身分：我
    - 具有存取權的使用者：任何人
 4. 點擊「部署」
-5. 複製「網頁應用程式」的 URL，這就是你的訂購系統網址
+5. 複製「網頁應用程式」的網址，這就是你的訂購系統網址
 
 ## 設定 Google Sheets
 
 系統使用兩個 Google Sheets：
 1. **訂單記錄表** - 儲存客戶訂單
-2. **產品列表表** - 儲存精油產品資訊
+2. **產品列表表** - 儲存精油商品資訊
 
-**重要**：所有自動創建的 Google Sheets 都會：
+**重要**：所有自動建立的 Google Sheets 都會：
 1. 自動放在「精油訂購APP」資料夾中
-2. 自動共享給管理帳號 `hello2paris@gmail.com`
+2. 自動共用給管理帳號 `hello2paris@gmail.com`
 
 這確保所有資料都在管理帳號的 Drive 中，並且集中在同一個資料夾，方便管理。
 
-### 方式一：自動創建（推薦）
+### 方式一：自動建立（建議）
 
 首次使用時：
-- 訂單記錄表會在第一筆訂單建立時自動創建，並自動移動到「精油訂購APP」資料夾，然後共享給 `hello2paris@gmail.com`
+- 訂單記錄表會在第一筆訂單建立時自動建立，並自動移動到「精油訂購APP」資料夾，然後共用給 `hello2paris@gmail.com`
 - 產品列表如未設定，系統會使用內建的預設清單
-- 如需創建產品列表，執行 `createProductListSheet` 函數會自動放在資料夾中並共享給管理帳號
-- 如果「精油訂購APP」資料夾不存在，系統會自動創建
+- 如需建立產品列表，執行 `createProductListSheet` 函式會自動放在資料夾中並共用給管理帳號
+- 如果「精油訂購APP」資料夾不存在，系統會自動建立
 
 ### 方式二：手動設定
 
-#### 1. 創建產品列表 Sheet
+#### 1. 建立產品列表 Sheet
 
 在 Apps Script 編輯器中：
 1. 開啟 Apps Script 編輯器：`clasp open`
-2. 點擊「執行」→ 選擇 `createProductListSheet` 函數
+2. 點擊「執行」→ 選擇 `createProductListSheet` 函式
 3. 授權執行
-4. 查看執行日誌，複製顯示的 Sheet ID
+4. 查看執行記錄，複製顯示的 Sheet ID
 5. 在 `Code.gs` 第 7 行設定：
 
 ```javascript
@@ -164,7 +164,7 @@ const PRODUCT_SHEET_ID = '你的產品列表Sheet ID';
 
 #### 2. 產品列表 Sheet 格式
 
-產品列表 Sheet 需要包含以下欄位（第一行為標題）：
+產品列表 Sheet 需要包含以下欄位（第一列為標題）：
 
 | 中文名稱 | 拉丁文名稱 | 法文名稱 | 尺寸1 | 價格1 | 尺寸2 | 價格2 | 尺寸3 | 價格3 |
 |---------|----------|---------|------|------|------|------|------|------|
@@ -183,7 +183,7 @@ const PRODUCT_SHEET_ID = '你的產品列表Sheet ID';
 
 1. 在 Google Drive 中建立一個 Google Sheet
 2. 複製 Sheet 的 ID（URL 中 `/d/` 和 `/edit` 之間的字串）
-3. 在 `Code.gs` 文件的第 6 行設定：
+3. 在 `Code.gs` 檔案的第 6 行設定：
 
 ```javascript
 const ORDER_SHEET_ID = '你的訂單記錄Sheet ID';
@@ -234,16 +234,16 @@ clasp info
 # 推送程式碼
 clasp push
 
-# 拉取程式碼
+# 拉回程式碼
 clasp pull
 
-# 查看部署列表
+# 查看部署清單
 clasp deployments
 
 # 開啟 Apps Script 編輯器
 clasp open
 
-# 查看日誌
+# 查看執行記錄
 clasp logs
 ```
 
@@ -251,21 +251,21 @@ clasp logs
 
 有兩種方式可以更新精油產品列表：
 
-### 方式一：使用 Google Sheet（推薦）
+### 方式一：使用 Google Sheet（建議）
 
-1. 在 Apps Script 編輯器中執行 `createProductListSheet()` 函數創建產品列表模板
-2. 在 Google Sheets 中直接編輯產品資料
+1. 在 Apps Script 編輯器中執行 `createProductListSheet()` 函式建立產品列表模板
+2. 在 Google Sheets 中直接編輯商品資料
 3. 系統會自動從 Sheet 讀取最新的產品列表
 4. 無需重新部署程式碼
 
 **優點**：
-- 可以隨時更新產品和價格
+- 可以隨時更新商品和價格
 - 不需要懂程式碼
-- 支援多人協作管理
+- 支援多人共同管理
 
 ### 方式二：修改程式碼
 
-如果不想使用 Google Sheet，可以直接修改 `Code.gs` 中的 `getDefaultEssentialOils()` 函數。
+如果不想使用 Google Sheet，可以直接修改 `Code.gs` 中的 `getDefaultEssentialOils()` 函式。
 
 新增產品範例：
 
@@ -295,12 +295,12 @@ clasp logs
 ### Version 2.0 (2026-01-11) - OAuth 登入系統
 - ✅ 新增獨立的登入頁面（Login.html）
 - ✅ 實作完整的 Google OAuth 2.0 登入流程
-- ✅ 新增用戶資訊顯示欄
+- ✅ 新增使用者資訊顯示欄
 - ✅ 新增登出功能和登出說明頁面
-- ✅ 改進 URL 路由系統（支援 ?page=login 和 ?page=logout）
-- ✅ 預留 Facebook 登入接口（UI 已完成，後端待實作）
-- ✅ 新增完整的 OAuth 登入功能文檔（OAUTH_LOGIN_GUIDE.md）
-- ✅ 改進安全性：未登入用戶無法訪問訂購頁面
+- ✅ 改進網址路由系統（支援 ?page=login 和 ?page=logout）
+- ✅ 預留 Facebook 登入介面（UI 已完成，後端待實作）
+- ✅ 新增完整的 OAuth 登入功能文件（OAUTH_LOGIN_GUIDE.md）
+- ✅ 改進安全性：未登入的使用者無法進入訂購頁面
 
 ### Version 1.0 - 基礎訂購系統
 - 基本的精油訂購功能
@@ -311,7 +311,7 @@ clasp logs
 
 ## 快速開始
 
-1. **安裝依賴**
+1. **安裝 Clasp**
    ```bash
    npm install -g @google/clasp
    ```
@@ -327,14 +327,14 @@ clasp logs
    clasp push
    ```
 
-4. **部署應用**
+4. **部署**
    - 執行 `clasp open` 開啟 Apps Script 編輯器
    - 點擊「部署」→「新增部署作業」
    - 選擇「網頁應用程式」
-   - 設定權限後取得 Web App URL
+   - 設定權限後取得 Web App 網址
 
 5. **開始使用**
-   - 訪問 Web App URL
+   - 打開 Web App 網址
    - 使用 Google 帳號登入
    - 開始訂購精油
 
